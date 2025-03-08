@@ -338,58 +338,104 @@ function renderProblemContent(problem, container) {
     const problemInfo = document.createElement('div');
     problemInfo.className = 'problem-info';
     
+    // 格式化题目描述，保留段落结构
+    const formattedDescription = problem.content.description
+        .replace(/\n\n/g, '</p><p>')
+        .replace(/\n/g, '<br>');
+    
     problemInfo.innerHTML = `
-        <span class="difficulty ${problem.difficulty}">${getDifficultyText(problem.difficulty)}</span>
-        <h3>${problem.id}. ${problem.title}</h3>
-        <p>${problem.content.description.replace(/\n/g, '</p><p>')}</p>
-        
-        ${problem.content.examples.map(example => `
-            <h4>示例 ${problem.content.examples.indexOf(example) + 1}：</h4>
-            <pre><code>输入：${example.input}
-输出：${example.output}${example.explanation ? '\n解释：' + example.explanation : ''}</code></pre>
-        `).join('')}
-        
-        <h4>提示：</h4>
+        <h2>${problem.id}. ${problem.title}</h2>
+        <div class="problem-meta">
+            <span><strong>难度：</strong> <span class="difficulty ${problem.difficulty}">${getDifficultyText(problem.difficulty)}</span></span>
+            <span><strong>分类：</strong> ${problem.tags.join(', ')}</span>
+        </div>
+        <p>${formattedDescription}</p>
+    `;
+    
+    // 创建示例区域，使用新的格式化方式
+    const examplesContainer = document.createElement('div');
+    examplesContainer.className = 'examples-container';
+    
+    problem.content.examples.forEach((example, index) => {
+        const exampleDiv = document.createElement('div');
+        exampleDiv.className = 'leetcode-example';
+        exampleDiv.innerHTML = `
+            <h4>示例 ${index + 1}：</h4>
+            <div class="input">
+                <span class="label">输入：</span>
+                <span class="content">${formatCodeExample(example.input)}</span>
+            </div>
+            <div class="output">
+                <span class="label">输出：</span>
+                <span class="content">${formatCodeExample(example.output)}</span>
+            </div>
+            ${example.explanation ? `
+            <div class="explanation">
+                <span class="label">解释：</span>
+                <span class="content">${formatCodeExample(example.explanation)}</span>
+            </div>` : ''}
+        `;
+        examplesContainer.appendChild(exampleDiv);
+    });
+    
+    problemInfo.appendChild(examplesContainer);
+    
+    // 添加约束条件
+    const constraintsDiv = document.createElement('div');
+    constraintsDiv.className = 'constraints';
+    constraintsDiv.innerHTML = `
+        <h4>约束条件：</h4>
         <ul>
             ${problem.content.constraints.map(constraint => `<li>${constraint}</li>`).join('')}
         </ul>
-        
-        <div class="tags">
-            ${problem.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-        </div>
     `;
+    
+    problemInfo.appendChild(constraintsDiv);
     
     // 创建解题内容区域
     const solutionContent = document.createElement('div');
     solutionContent.className = 'solution-content';
     
+    // 格式化解题思路，保留段落结构
+    const formattedApproach = problem.content.solution.approach
+        .replace(/\n\n/g, '</p><p>')
+        .replace(/\n/g, '<br>');
+    
     solutionContent.innerHTML = `
         <h3>解题思路</h3>
-        <p>${problem.content.solution.approach.replace(/\n/g, '</p><p>')}</p>
+        <p>${formattedApproach}</p>
         
         <h3>代码实现</h3>
-        
-        ${problem.content.solution.code.java ? `
+    `;
+    
+    // 添加代码实现
+    const codeImplementations = [];
+    
+    if (problem.content.solution.code.java) {
+        codeImplementations.push(`
             <h4>Java 实现</h4>
-            <div class="code-block">
-                <pre><code class="language-java">${problem.content.solution.code.java}</code></pre>
-            </div>
-        ` : ''}
-        
-        ${problem.content.solution.code.python ? `
+            <pre><code class="language-java">${problem.content.solution.code.java}</code></pre>
+        `);
+    }
+    
+    if (problem.content.solution.code.python) {
+        codeImplementations.push(`
             <h4>Python 实现</h4>
-            <div class="code-block">
-                <pre><code class="language-python">${problem.content.solution.code.python}</code></pre>
-            </div>
-        ` : ''}
-        
-        ${problem.content.solution.code.javascript ? `
+            <pre><code class="language-python">${problem.content.solution.code.python}</code></pre>
+        `);
+    }
+    
+    if (problem.content.solution.code.javascript) {
+        codeImplementations.push(`
             <h4>JavaScript 实现</h4>
-            <div class="code-block">
-                <pre><code class="language-javascript">${problem.content.solution.code.javascript}</code></pre>
-            </div>
-        ` : ''}
-        
+            <pre><code class="language-javascript">${problem.content.solution.code.javascript}</code></pre>
+        `);
+    }
+    
+    solutionContent.innerHTML += codeImplementations.join('');
+    
+    // 添加复杂度分析
+    solutionContent.innerHTML += `
         <h3>复杂度分析</h3>
         <div class="complexity">
             <div class="complexity-item">
@@ -399,12 +445,24 @@ function renderProblemContent(problem, container) {
                 <strong>空间复杂度：</strong> ${problem.content.solution.spaceComplexity}
             </div>
         </div>
-        
-        <div class="navigation-buttons">
-            <a href="${basePath}/solution.html?id=${problem.id - 1}" class="prev-next-btn" ${problem.id <= 1 ? 'style="visibility: hidden;"' : ''}>上一题</a>
-            <a href="${basePath}/solution.html?id=${problem.id + 1}" class="prev-next-btn">下一题</a>
-        </div>
     `;
+    
+    // 添加导航按钮
+    const navigationDiv = document.createElement('div');
+    navigationDiv.className = 'solution-nav';
+    navigationDiv.innerHTML = `
+        <a href="${basePath}/solution.html?id=${problem.id - 1}" ${problem.id <= 1 ? 'style="visibility: hidden;"' : ''}>
+            <span>←</span> 上一题
+        </a>
+        <a href="${basePath}/problems.html">
+            返回题目列表
+        </a>
+        <a href="${basePath}/solution.html?id=${problem.id + 1}">
+            下一题 <span>→</span>
+        </a>
+    `;
+    
+    solutionContent.appendChild(navigationDiv);
     
     // 添加到页面
     container.appendChild(problemInfo);
@@ -420,6 +478,25 @@ function renderProblemContent(problem, container) {
     } else {
         console.warn('highlight.js未加载，无法应用代码高亮');
     }
+}
+
+// 格式化代码示例，确保正确对齐
+function formatCodeExample(text) {
+    if (!text) return '';
+    
+    // 先处理HTML特殊字符，防止XSS攻击
+    text = text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    
+    // 处理空格和换行
+    text = text.replace(/ /g, '&nbsp;');
+    text = text.replace(/\n/g, '<br>');
+    
+    return text;
 }
 
 // 显示错误信息

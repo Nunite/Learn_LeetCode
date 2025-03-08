@@ -11,12 +11,38 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
+            table-layout: fixed;
         }
         
         .problem-table th, .problem-table td {
             padding: 12px 15px;
             text-align: left;
             border-bottom: 1px solid #eee;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .problem-table th:nth-child(1), .problem-table td:nth-child(1) {
+            width: 8%;
+        }
+        
+        .problem-table th:nth-child(2), .problem-table td:nth-child(2) {
+            width: 35%;
+            white-space: normal;
+        }
+        
+        .problem-table th:nth-child(3), .problem-table td:nth-child(3) {
+            width: 12%;
+        }
+        
+        .problem-table th:nth-child(4), .problem-table td:nth-child(4) {
+            width: 30%;
+        }
+        
+        .problem-table th:nth-child(5), .problem-table td:nth-child(5) {
+            width: 15%;
+            text-align: center;
         }
         
         .problem-table th {
@@ -33,10 +59,11 @@
             display: flex;
             gap: 15px;
             margin-bottom: 20px;
+            flex-wrap: wrap;
         }
         
         .search-filter input, .search-filter select {
-            padding: 8px 12px;
+            padding: 10px 15px;
             border: 1px solid #ddd;
             border-radius: 4px;
             font-size: 14px;
@@ -44,22 +71,26 @@
         
         .search-filter input {
             flex-grow: 1;
+            min-width: 200px;
         }
         
         .pagination {
             display: flex;
             justify-content: center;
             margin-top: 30px;
-            gap: 5px;
+            gap: 8px;
+            flex-wrap: wrap;
         }
         
         .pagination a {
             display: inline-block;
-            padding: 8px 12px;
+            padding: 10px 15px;
             border: 1px solid #ddd;
             border-radius: 4px;
             color: #333;
             transition: all 0.3s ease;
+            min-width: 40px;
+            text-align: center;
         }
         
         .pagination a:hover, .pagination a.active {
@@ -67,6 +98,22 @@
             color: white;
             border-color: #0066cc;
             text-decoration: none;
+        }
+        
+        @media (max-width: 768px) {
+            .problem-table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .search-filter {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .search-filter input, .search-filter select {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -79,6 +126,7 @@
                     <li><a href="index.html">首页</a></li>
                     <li><a href="problems.html" class="active">题目列表</a></li>
                     <li><a href="about.html">关于</a></li>
+                    <li><a href="admin/manage-solutions.html">管理</a></li>
                 </ul>
             </nav>
         </div>

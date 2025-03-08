@@ -9,6 +9,8 @@
     <style>
         .about-content {
             line-height: 1.8;
+            max-width: 1200px; /* 限制内容最大宽度，提高可读性 */
+            margin: 0 auto; /* 居中显示 */
         }
         
         .about-content p {
@@ -22,40 +24,67 @@
         
         .profile {
             display: flex;
-            align-items: center;
-            gap: 30px;
+            align-items: flex-start; /* 改为顶部对齐，在小屏幕上更好看 */
+            gap: 40px; /* 增加间距 */
             margin: 30px 0;
+            flex-wrap: wrap; /* 在小屏幕上允许换行 */
         }
         
         .profile-image {
-            width: 150px;
-            height: 150px;
+            width: 180px; /* 增加图片尺寸 */
+            height: 180px;
             border-radius: 50%;
             object-fit: cover;
             border: 5px solid #f0f7ff;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* 添加阴影效果 */
+        }
+        
+        .profile-info {
+            flex: 1;
+            min-width: 300px; /* 确保文本区域有最小宽度 */
         }
         
         .social-links {
             display: flex;
             gap: 15px;
             margin-top: 20px;
+            flex-wrap: wrap; /* 在小屏幕上允许换行 */
         }
         
         .social-links a {
             display: inline-flex;
             align-items: center;
-            gap: 5px;
-            padding: 8px 15px;
+            gap: 8px; /* 增加图标和文本间距 */
+            padding: 10px 18px; /* 增加内边距 */
             background-color: #f0f7ff;
             border-radius: 20px;
-            color: #0066cc;
             transition: all 0.3s ease;
+            margin-bottom: 10px; /* 添加底部间距，在换行时更好看 */
         }
         
         .social-links a:hover {
             background-color: #0066cc;
             color: white;
-            text-decoration: none;
+            transform: translateY(-2px); /* 添加悬停效果 */
+        }
+        
+        /* 添加响应式设计 */
+        @media (max-width: 768px) {
+            .profile {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                gap: 20px;
+            }
+            
+            .profile-image {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .social-links {
+                justify-content: center;
+            }
         }
         
         .skills {
@@ -83,6 +112,7 @@
                     <li><a href="index.html">首页</a></li>
                     <li><a href="problems.html">题目列表</a></li>
                     <li><a href="about.html" class="active">关于</a></li>
+                    <li><a href="admin/manage-solutions.html">管理</a></li>
                 </ul>
             </nav>
         </div>
@@ -95,7 +125,7 @@
             <div class="about-content">
                 <div class="profile">
                     <img src="https://via.placeholder.com/150" alt="作者头像" class="profile-image">
-                    <div>
+                    <div class="profile-info">
                         <h3>Lws</h3>
                         <p>软件工程师 | 算法爱好者 | 开源贡献者</p>
                         <div class="social-links">

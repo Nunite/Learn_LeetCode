@@ -23,9 +23,10 @@ body {
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 30px;
+    width: 100%;
 }
 
 a {
@@ -103,8 +104,8 @@ section h2 {
 /* 问题卡片样式 */
 .problem-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 25px;
 }
 
 .problem-card {
@@ -232,6 +233,64 @@ html, body {
     overflow-x: hidden;
 }
 
+/* 代码示例样式 */
+pre, code {
+    font-family: 'Fira Code', 'Consolas', 'Courier New', monospace;
+    font-size: 15px;
+    line-height: 1.5;
+    background-color: #282c34;
+    color: #abb2bf;
+    border-radius: 8px;
+    overflow-x: auto;
+}
+
+pre {
+    padding: 0;
+    margin: 20px 0;
+}
+
+code {
+    padding: 20px;
+    display: block;
+    white-space: pre;
+    tab-size: 4;
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    -webkit-tab-size: 4;
+}
+
+/* LeetCode示例样式 */
+.leetcode-example {
+    background-color: #282c34;
+    color: #abb2bf;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    font-family: 'Fira Code', 'Consolas', 'Courier New', monospace;
+    overflow-x: auto;
+}
+
+.leetcode-example .input,
+.leetcode-example .output,
+.leetcode-example .explanation {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: flex-start;
+}
+
+.leetcode-example .label {
+    font-weight: bold;
+    color: #e5c07b;
+    min-width: 60px;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.leetcode-example .content {
+    white-space: pre;
+    font-family: 'Fira Code', 'Consolas', 'Courier New', monospace;
+}
+
 /* 响应式设计 */
 @media (max-width: 768px) {
     header .container {
@@ -244,5 +303,30 @@ html, body {
     
     .problem-cards {
         grid-template-columns: 1fr;
+    }
+    
+    .container {
+        padding: 0 15px;
+    }
+    
+    .leetcode-example .input,
+    .leetcode-example .output,
+    .leetcode-example .explanation {
+        flex-direction: column;
+    }
+    
+    .leetcode-example .label {
+        margin-bottom: 5px;
+    }
+}
+
+/* 添加更大屏幕的响应式设计 */
+@media (min-width: 1600px) {
+    .container {
+        max-width: 1600px;
+    }
+    
+    .problem-cards {
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
     }
 } 

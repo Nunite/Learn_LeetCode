@@ -44,4 +44,148 @@ body::after {
     body {
         min-height: 100vh;
     }
+}
+
+/* 修复空白和对齐问题的CSS */
+
+/* 保留代码块中的空格和格式 */
+pre, code, .example-code, .example-io .content {
+    white-space: pre !important;
+    tab-size: 4;
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    -webkit-tab-size: 4;
+    font-variant-ligatures: none; /* 禁用连字，确保每个字符都是独立的 */
+}
+
+/* 确保代码块内的文本不会被截断 */
+pre, .example-code {
+    overflow-x: auto;
+    word-wrap: normal;
+    word-break: keep-all;
+}
+
+/* 使用等宽字体确保对齐 */
+pre, code, .example-code, .example-io .content, .monospace {
+    font-family: 'Fira Code', 'Consolas', 'Courier New', monospace !important;
+}
+
+/* 确保输入输出示例正确对齐 */
+.example-io {
+    margin: 15px 0;
+}
+
+/* 特殊处理LeetCode示例格式 */
+.leetcode-example {
+    background-color: #282c34;
+    color: #abb2bf;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    overflow-x: auto;
+}
+
+.leetcode-example .input,
+.leetcode-example .output,
+.leetcode-example .explanation {
+    margin-bottom: 10px;
+}
+
+.leetcode-example .label {
+    font-weight: bold;
+    color: #e5c07b;
+    display: inline-block;
+    min-width: 80px;
+}
+
+.leetcode-example .content {
+    font-family: 'Fira Code', 'Consolas', 'Courier New', monospace;
+    white-space: pre;
+    display: inline-block;
+}
+
+/* 处理代码中的注释，使其更明显 */
+.code-comment {
+    color: #7f848e;
+    font-style: italic;
+}
+
+/* 确保代码示例中的行对齐 */
+.code-line {
+    display: block;
+    line-height: 1.5;
+}
+
+/* 处理示例中的解释部分 */
+.explanation-text {
+    color: #7f848e;
+    font-style: italic;
+    margin-top: 5px;
+    margin-left: 80px;
+}
+
+/* 处理LeetCode题目中的表格 */
+.leetcode-table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 20px 0;
+    overflow-x: auto;
+    display: block;
+}
+
+.leetcode-table th,
+.leetcode-table td {
+    border: 1px solid #4b5263;
+    padding: 8px 12px;
+    text-align: left;
+}
+
+.leetcode-table th {
+    background-color: #3a3f4b;
+    color: #e5c07b;
+}
+
+/* 处理LeetCode题目中的提示和约束 */
+.constraints {
+    background-color: #f8f9fa; /* 改为浅色背景 */
+    border-left: 4px solid #0066cc; /* 改为蓝色边框 */
+    padding: 15px 20px; /* 增加内边距 */
+    margin: 20px 0; /* 增加外边距 */
+    border-radius: 4px;
+    color: #333; /* 确保文本颜色为深色 */
+}
+
+.constraints h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #2c3e50;
+}
+
+.constraints ul {
+    margin: 0;
+    padding-left: 20px;
+    list-style-type: disc; /* 确保列表项有标记 */
+}
+
+.constraints li {
+    margin-bottom: 5px; /* 列表项之间的间距 */
+}
+
+/* 处理代码示例中的数字和符号对齐 */
+.code-number {
+    color: #d19a66;
+}
+
+.code-string {
+    color: #98c379;
+}
+
+.code-operator {
+    color: #c678dd;
+}
+
+/* 确保示例中的数组和矩阵正确对齐 */
+.code-array {
+    white-space: pre;
+    font-family: 'Fira Code', 'Consolas', 'Courier New', monospace;
 } 
