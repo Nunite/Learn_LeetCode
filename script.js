@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // 加载题目数据
 async function loadProblemsData() {
     try {
-        const response = await fetch('/data/problems.json');
+        const response = await fetch('./data/problems.json');
         if (!response.ok) {
             throw new Error('无法加载题目数据');
         }
