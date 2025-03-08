@@ -81,10 +81,23 @@ document.addEventListener('DOMContentLoaded', function() {
 // 加载题目数据
 async function loadProblemsData() {
     try {
-        // 简化路径逻辑
+        // 检测环境并设置正确的路径
         let dataPath = './data/problems.json';
         
+        // 检查是否在GitHub Pages上
+        if (window.location.hostname.includes('github.io')) {
+            // 获取仓库名称
+            const pathSegments = window.location.pathname.split('/');
+            const repoName = pathSegments[1]; // 通常是第二个路径段
+            
+            if (repoName) {
+                dataPath = `/${repoName}/data/problems.json`;
+                console.log('GitHub Pages环境，使用路径:', dataPath);
+            }
+        }
+        
         // 添加详细日志
+        console.log('当前页面URL:', window.location.href);
         console.log('当前页面路径:', window.location.pathname);
         console.log('尝试加载数据路径:', dataPath);
         
@@ -94,6 +107,32 @@ async function loadProblemsData() {
         console.log('响应状态:', response.status, response.statusText);
         
         if (!response.ok) {
+            // 如果第一次尝试失败，尝试备用路径
+            console.warn('第一次尝试加载失败，尝试备用路径');
+            
+            // 尝试不同的路径组合
+            const backupPaths = [
+                './data/problems.json',
+                '/data/problems.json',
+                '/Learn_LeetCode/data/problems.json',
+                '../data/problems.json'
+            ];
+            
+            for (const backupPath of backupPaths) {
+                console.log('尝试备用路径:', backupPath);
+                try {
+                    const backupResponse = await fetch(backupPath);
+                    if (backupResponse.ok) {
+                        console.log('备用路径成功:', backupPath);
+                        const problems = await backupResponse.json();
+                        processProblemsData(problems);
+                        return;
+                    }
+                } catch (backupError) {
+                    console.error('备用路径失败:', backupPath, backupError);
+                }
+            }
+            
             throw new Error(`无法加载题目数据: ${response.status} ${response.statusText}`);
         }
         
@@ -102,50 +141,54 @@ async function loadProblemsData() {
         try {
             problems = await response.json();
             console.log('成功加载题目数据，题目数量:', problems.length);
+            processProblemsData(problems);
         } catch (parseError) {
             console.error('JSON解析错误:', parseError);
             throw new Error('题目数据格式错误');
         }
-        
-        // 根据当前页面处理数据
-        const currentPath = window.location.pathname;
-        console.log('处理页面:', currentPath);
-        
-        if (currentPath.endsWith('/index.html') || currentPath.endsWith('/') || currentPath.includes('index')) {
-            // 首页：显示精选题解
-            console.log('渲染首页精选题解');
-            renderFeaturedProblems(problems.slice(0, 3));
-        } else if (currentPath.endsWith('/problems.html') || currentPath.includes('problems')) {
-            // 题目列表页：显示所有题目
-            console.log('渲染题目列表');
-            renderProblemList(problems);
-            setupProblemFilters();
-        } else if (currentPath.includes('/solution.html') || currentPath.includes('solution')) {
-            // 题解页：显示特定题目的解答
-            console.log('渲染题解页面');
-            const urlParams = new URLSearchParams(window.location.search);
-            const problemId = urlParams.get('id');
-            console.log('题目ID:', problemId);
-            
-            if (problemId) {
-                const problem = problems.find(p => p.id === parseInt(problemId));
-                if (problem) {
-                    console.log('找到题目:', problem.title);
-                    renderProblemSolution(problem);
-                } else {
-                    console.error('未找到题目ID:', problemId);
-                    showErrorMessage('未找到该题目');
-                }
-            } else {
-                console.error('未指定题目ID');
-                showErrorMessage('未指定题目ID');
-            }
-        } else {
-            console.log('未知页面类型:', currentPath);
-        }
     } catch (error) {
         console.error('加载题目数据失败:', error);
         showErrorMessage(`加载题目数据失败: ${error.message}`);
+    }
+}
+
+// 处理题目数据的函数，从loadProblemsData中提取出来
+function processProblemsData(problems) {
+    // 根据当前页面处理数据
+    const currentPath = window.location.pathname;
+    console.log('处理页面:', currentPath);
+    
+    if (currentPath.endsWith('/index.html') || currentPath.endsWith('/') || currentPath.includes('index')) {
+        // 首页：显示精选题解
+        console.log('渲染首页精选题解');
+        renderFeaturedProblems(problems.slice(0, 3));
+    } else if (currentPath.endsWith('/problems.html') || currentPath.includes('problems')) {
+        // 题目列表页：显示所有题目
+        console.log('渲染题目列表');
+        renderProblemList(problems);
+        setupProblemFilters();
+    } else if (currentPath.endsWith('/solution.html') || currentPath.includes('solution')) {
+        // 题解页：显示特定题目的解答
+        console.log('渲染题解页面');
+        const urlParams = new URLSearchParams(window.location.search);
+        const problemId = urlParams.get('id');
+        console.log('题目ID:', problemId);
+        
+        if (problemId) {
+            const problem = problems.find(p => p.id === parseInt(problemId));
+            if (problem) {
+                console.log('找到题目:', problem.title);
+                renderProblemSolution(problem);
+            } else {
+                console.error('未找到题目ID:', problemId);
+                showErrorMessage('未找到该题目');
+            }
+        } else {
+            console.error('未指定题目ID');
+            showErrorMessage('未指定题目ID');
+        }
+    } else {
+        console.log('未知页面类型:', currentPath);
     }
 }
 
@@ -159,6 +202,15 @@ function renderFeaturedProblems(problems) {
     
     problemCardsContainer.innerHTML = '';
     
+    // 获取基础路径
+    let basePath = '';
+    if (window.location.hostname.includes('github.io')) {
+        const pathSegments = window.location.pathname.split('/');
+        if (pathSegments.length > 1) {
+            basePath = '/' + pathSegments[1]; // 仓库名称
+        }
+    }
+    
     problems.forEach(problem => {
         const card = document.createElement('div');
         card.className = 'problem-card';
@@ -167,7 +219,7 @@ function renderFeaturedProblems(problems) {
             <h3>${problem.id}. ${problem.title}</h3>
             <span class="difficulty ${problem.difficulty}">${getDifficultyText(problem.difficulty)}</span>
             <p>${problem.content.description.substring(0, 100)}...</p>
-            <a href="solution.html?id=${problem.id}" class="btn">查看解题</a>
+            <a href="${basePath}/solution.html?id=${problem.id}" class="btn">查看解题</a>
         `;
         
         problemCardsContainer.appendChild(card);
@@ -181,6 +233,15 @@ function renderProblemList(problems) {
     
     problemTable.innerHTML = '';
     
+    // 获取基础路径
+    let basePath = '';
+    if (window.location.hostname.includes('github.io')) {
+        const pathSegments = window.location.pathname.split('/');
+        if (pathSegments.length > 1) {
+            basePath = '/' + pathSegments[1]; // 仓库名称
+        }
+    }
+    
     problems.forEach(problem => {
         const row = document.createElement('tr');
         
@@ -189,7 +250,7 @@ function renderProblemList(problems) {
             <td>${problem.title}</td>
             <td><span class="difficulty ${problem.difficulty}">${getDifficultyText(problem.difficulty)}</span></td>
             <td>${problem.tags.join(', ')}</td>
-            <td><a href="solution.html?id=${problem.id}">查看解题</a></td>
+            <td><a href="${basePath}/solution.html?id=${problem.id}">查看解题</a></td>
         `;
         
         problemTable.appendChild(row);
@@ -236,14 +297,16 @@ function renderProblemSolution(problem) {
     
     document.title = `${problem.title} - LeetCode题解博客`;
     
-    // 修改选择器，使用更通用的方式查找主内容区域
-    const mainContent = document.querySelector('main section');
-    console.log('主内容区域:', mainContent);
+    // 使用ID选择器，更可靠地找到内容区域
+    const mainContent = document.getElementById('solution-content');
+    console.log('主内容区域(通过ID):', mainContent);
     
     if (!mainContent) {
-        console.error('未找到主内容区域，尝试其他选择器');
+        console.error('未找到ID为solution-content的元素，尝试其他选择器');
         // 尝试其他可能的选择器
-        const alternativeContent = document.querySelector('main') || document.querySelector('body');
+        const alternativeContent = document.querySelector('main section') || document.querySelector('main') || document.querySelector('body');
+        console.log('替代内容区域:', alternativeContent);
+        
         if (alternativeContent) {
             console.log('使用替代内容区域');
             renderProblemContent(problem, alternativeContent);
@@ -262,6 +325,15 @@ function renderProblemSolution(problem) {
 
 // 将渲染逻辑提取到单独的函数中
 function renderProblemContent(problem, container) {
+    // 获取基础路径
+    let basePath = '';
+    if (window.location.hostname.includes('github.io')) {
+        const pathSegments = window.location.pathname.split('/');
+        if (pathSegments.length > 1) {
+            basePath = '/' + pathSegments[1]; // 仓库名称
+        }
+    }
+    
     // 创建题目信息区域
     const problemInfo = document.createElement('div');
     problemInfo.className = 'problem-info';
@@ -329,8 +401,8 @@ function renderProblemContent(problem, container) {
         </div>
         
         <div class="navigation-buttons">
-            <a href="solution.html?id=${problem.id - 1}" class="prev-next-btn" ${problem.id <= 1 ? 'style="visibility: hidden;"' : ''}>上一题</a>
-            <a href="solution.html?id=${problem.id + 1}" class="prev-next-btn">下一题</a>
+            <a href="${basePath}/solution.html?id=${problem.id - 1}" class="prev-next-btn" ${problem.id <= 1 ? 'style="visibility: hidden;"' : ''}>上一题</a>
+            <a href="${basePath}/solution.html?id=${problem.id + 1}" class="prev-next-btn">下一题</a>
         </div>
     `;
     
