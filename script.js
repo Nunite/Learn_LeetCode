@@ -81,7 +81,22 @@ document.addEventListener('DOMContentLoaded', function() {
 // 加载题目数据
 async function loadProblemsData() {
     try {
-        const response = await fetch('./data/problems.json');
+        // 获取基础路径
+        let basePath = '';
+        // 检查是否在GitHub Pages上
+        if (window.location.hostname.includes('github.io')) {
+            // 从URL中提取仓库名称
+            const pathSegments = window.location.pathname.split('/');
+            if (pathSegments.length > 1 && pathSegments[1]) {
+                basePath = '/' + pathSegments[1];
+            }
+        }
+        
+        // 构建完整的数据路径
+        const dataPath = `${basePath}/data/problems.json`;
+        console.log('尝试加载数据路径:', dataPath);
+        
+        const response = await fetch(dataPath);
         if (!response.ok) {
             throw new Error('无法加载题目数据');
         }
