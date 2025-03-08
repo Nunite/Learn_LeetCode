@@ -1,0 +1,47 @@
+/* 修复底部白边问题的专用样式 */
+
+/* 重置所有元素的边距和填充 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 确保HTML和BODY元素占满整个视口高度 */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+/* 使用Flexbox布局确保页脚始终位于底部 */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1 0 auto; /* 主内容区域自动填充可用空间 */
+}
+
+/* 确保页脚不会有额外的边距 */
+footer {
+    flex-shrink: 0; /* 防止页脚被压缩 */
+    margin-top: 0;
+    margin-bottom: 0;
+    width: 100%;
+}
+
+/* 移除可能导致白边的隐藏元素 */
+body::after {
+    content: none;
+}
+
+/* 修复特定浏览器的渲染问题 */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+    body {
+        min-height: 100vh;
+    }
+} 

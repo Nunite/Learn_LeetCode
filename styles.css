@@ -5,11 +5,21 @@
     box-sizing: border-box;
 }
 
+html, body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
 body {
     font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
     line-height: 1.6;
     color: #333;
     background-color: #f8f9fa;
+    position: relative;
+    overflow-x: hidden; /* 防止水平滚动条 */
 }
 
 .container {
@@ -71,7 +81,7 @@ nav ul li a:hover, nav ul li a.active {
 
 /* 主要内容区域 */
 main {
-    min-height: calc(100vh - 200px);
+    flex: 1;
     padding-bottom: 50px;
 }
 
@@ -188,10 +198,38 @@ footer {
     color: #fff;
     padding: 20px 0;
     text-align: center;
+    width: 100%;
+    margin-top: auto; /* 确保页脚在内容较少时也位于底部 */
 }
 
 footer a {
     color: #8be9fd;
+}
+
+/* 修复底部白边问题 */
+body::after {
+    content: "";
+    display: block;
+    height: 0;
+    clear: both;
+}
+
+/* 确保页面内容填满整个视口高度 */
+#app, .page-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 确保页脚紧贴底部 */
+footer {
+    margin-top: auto;
+    padding-bottom: 0;
+}
+
+/* 移除可能导致白边的元素样式 */
+html, body {
+    overflow-x: hidden;
 }
 
 /* 响应式设计 */
