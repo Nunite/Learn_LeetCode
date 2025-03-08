@@ -81,55 +81,71 @@ document.addEventListener('DOMContentLoaded', function() {
 // 加载题目数据
 async function loadProblemsData() {
     try {
-        // 获取基础路径
-        let basePath = '';
-        // 检查是否在GitHub Pages上
-        if (window.location.hostname.includes('github.io')) {
-            // 从URL中提取仓库名称
-            const pathSegments = window.location.pathname.split('/');
-            if (pathSegments.length > 1 && pathSegments[1]) {
-                basePath = '/' + pathSegments[1];
-            }
-        }
+        // 简化路径逻辑
+        let dataPath = './data/problems.json';
         
-        // 构建完整的数据路径
-        const dataPath = `${basePath}/data/problems.json`;
+        // 添加详细日志
+        console.log('当前页面路径:', window.location.pathname);
         console.log('尝试加载数据路径:', dataPath);
         
         const response = await fetch(dataPath);
+        
+        // 添加详细的响应信息
+        console.log('响应状态:', response.status, response.statusText);
+        
         if (!response.ok) {
-            throw new Error('无法加载题目数据');
+            throw new Error(`无法加载题目数据: ${response.status} ${response.statusText}`);
         }
-        const problems = await response.json();
+        
+        // 尝试解析JSON
+        let problems;
+        try {
+            problems = await response.json();
+            console.log('成功加载题目数据，题目数量:', problems.length);
+        } catch (parseError) {
+            console.error('JSON解析错误:', parseError);
+            throw new Error('题目数据格式错误');
+        }
         
         // 根据当前页面处理数据
         const currentPath = window.location.pathname;
+        console.log('处理页面:', currentPath);
         
-        if (currentPath.endsWith('/index.html') || currentPath.endsWith('/')) {
+        if (currentPath.endsWith('/index.html') || currentPath.endsWith('/') || currentPath.includes('index')) {
             // 首页：显示精选题解
+            console.log('渲染首页精选题解');
             renderFeaturedProblems(problems.slice(0, 3));
-        } else if (currentPath.endsWith('/problems.html')) {
+        } else if (currentPath.endsWith('/problems.html') || currentPath.includes('problems')) {
             // 题目列表页：显示所有题目
+            console.log('渲染题目列表');
             renderProblemList(problems);
             setupProblemFilters();
-        } else if (currentPath.includes('/solution.html')) {
+        } else if (currentPath.includes('/solution.html') || currentPath.includes('solution')) {
             // 题解页：显示特定题目的解答
+            console.log('渲染题解页面');
             const urlParams = new URLSearchParams(window.location.search);
             const problemId = urlParams.get('id');
+            console.log('题目ID:', problemId);
+            
             if (problemId) {
                 const problem = problems.find(p => p.id === parseInt(problemId));
                 if (problem) {
+                    console.log('找到题目:', problem.title);
                     renderProblemSolution(problem);
                 } else {
+                    console.error('未找到题目ID:', problemId);
                     showErrorMessage('未找到该题目');
                 }
             } else {
+                console.error('未指定题目ID');
                 showErrorMessage('未指定题目ID');
             }
+        } else {
+            console.log('未知页面类型:', currentPath);
         }
     } catch (error) {
         console.error('加载题目数据失败:', error);
-        showErrorMessage('加载题目数据失败，请刷新页面重试');
+        showErrorMessage(`加载题目数据失败: ${error.message}`);
     }
 }
 
@@ -216,11 +232,36 @@ function setupProblemFilters() {
 
 // 渲染题解页面
 function renderProblemSolution(problem) {
+    console.log('开始渲染题解:', problem.title);
+    
     document.title = `${problem.title} - LeetCode题解博客`;
     
-    const mainContent = document.querySelector('main .container section');
-    if (!mainContent) return;
+    // 修改选择器，使用更通用的方式查找主内容区域
+    const mainContent = document.querySelector('main section');
+    console.log('主内容区域:', mainContent);
     
+    if (!mainContent) {
+        console.error('未找到主内容区域，尝试其他选择器');
+        // 尝试其他可能的选择器
+        const alternativeContent = document.querySelector('main') || document.querySelector('body');
+        if (alternativeContent) {
+            console.log('使用替代内容区域');
+            renderProblemContent(problem, alternativeContent);
+            return;
+        }
+        console.error('无法找到任何可用的内容区域');
+        return;
+    }
+    
+    // 清空加载指示器
+    mainContent.innerHTML = '';
+    
+    // 渲染内容
+    renderProblemContent(problem, mainContent);
+}
+
+// 将渲染逻辑提取到单独的函数中
+function renderProblemContent(problem, container) {
     // 创建题目信息区域
     const problemInfo = document.createElement('div');
     problemInfo.className = 'problem-info';
@@ -256,20 +297,26 @@ function renderProblemSolution(problem) {
         
         <h3>代码实现</h3>
         
-        <h4>Java 实现</h4>
-        <div class="code-block">
-            <pre><code class="language-java">${problem.content.solution.code.java}</code></pre>
-        </div>
+        ${problem.content.solution.code.java ? `
+            <h4>Java 实现</h4>
+            <div class="code-block">
+                <pre><code class="language-java">${problem.content.solution.code.java}</code></pre>
+            </div>
+        ` : ''}
         
-        <h4>Python 实现</h4>
-        <div class="code-block">
-            <pre><code class="language-python">${problem.content.solution.code.python}</code></pre>
-        </div>
+        ${problem.content.solution.code.python ? `
+            <h4>Python 实现</h4>
+            <div class="code-block">
+                <pre><code class="language-python">${problem.content.solution.code.python}</code></pre>
+            </div>
+        ` : ''}
         
-        <h4>JavaScript 实现</h4>
-        <div class="code-block">
-            <pre><code class="language-javascript">${problem.content.solution.code.javascript}</code></pre>
-        </div>
+        ${problem.content.solution.code.javascript ? `
+            <h4>JavaScript 实现</h4>
+            <div class="code-block">
+                <pre><code class="language-javascript">${problem.content.solution.code.javascript}</code></pre>
+            </div>
+        ` : ''}
         
         <h3>复杂度分析</h3>
         <div class="complexity">
@@ -283,19 +330,23 @@ function renderProblemSolution(problem) {
         
         <div class="navigation-buttons">
             <a href="solution.html?id=${problem.id - 1}" class="prev-next-btn" ${problem.id <= 1 ? 'style="visibility: hidden;"' : ''}>上一题</a>
-            <a href="solution.html?id=${problem.id + 1}" class="prev-next-btn">下一题：${problem.id + 1}. 下一题</a>
+            <a href="solution.html?id=${problem.id + 1}" class="prev-next-btn">下一题</a>
         </div>
     `;
     
-    mainContent.innerHTML = '';
-    mainContent.appendChild(problemInfo);
-    mainContent.appendChild(solutionContent);
+    // 添加到页面
+    container.appendChild(problemInfo);
+    container.appendChild(solutionContent);
+    console.log('题解渲染完成');
     
     // 代码高亮
     if (typeof hljs !== 'undefined') {
+        console.log('应用代码高亮');
         document.querySelectorAll('pre code').forEach(block => {
             hljs.highlightElement(block);
         });
+    } else {
+        console.warn('highlight.js未加载，无法应用代码高亮');
     }
 }
 
