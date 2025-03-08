@@ -2,7 +2,8 @@
 
 ![logo](docs/resources/logo_title.svg)
 
-- 此项目原地址为：https://github.com/AllocBlock/CS1.6-mapper-guide，原作者弃坑较久，现在我Lws改为KZ地图制作教程
+- 此项目原地址为：https://github.com/AllocBlock/CS1.6-mapper-guide
+- 原作者弃坑较久，现在我Lws改为KZ地图制作教程
 
 
 - 欢迎加入QQ群 [彩笔的逆袭 群号：15876347](https://jq.qq.com/?_wv=1027&k=e6eqbt1u) 一起玩耍！
