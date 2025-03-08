@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LeetCode题解博客</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>LeetCode题解博客</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html" class="active">首页</a></li>
+                    <li><a href="problems.html">题目列表</a></li>
+                    <li><a href="about.html">关于</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="intro">
+            <h2>欢迎来到我的LeetCode题解博客</h2>
+            <p>这里记录了我在LeetCode上刷题的心得和解题思路，希望能对你有所帮助。</p>
+            
+            <div class="admin-panel" style="margin-top: 20px; padding: 15px; background-color: #f0f7ff; border-radius: 8px;">
+                <h3 style="margin-bottom: 10px;">题解管理</h3>
+                <p>您可以通过以下方式添加新的题解：</p>
+                <a href="admin/add-solution.html" class="btn" style="margin-top: 10px;">添加新题解</a>
+            </div>
+        </section>
+
+        <section class="featured-problems">
+            <h2>精选题解</h2>
+            <div class="problem-cards">
+                <!-- 题目卡片将通过JavaScript动态加载 -->
+                <div class="loading-indicator" style="text-align: center; grid-column: 1 / -1; padding: 30px;">
+                    <p>正在加载题目数据...</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="categories">
+            <h2>题目分类</h2>
+            <div class="category-list">
+                <a href="categories/array.html" class="category-item">数组</a>
+                <a href="categories/string.html" class="category-item">字符串</a>
+                <a href="categories/linked-list.html" class="category-item">链表</a>
+                <a href="categories/tree.html" class="category-item">树</a>
+                <a href="categories/dynamic-programming.html" class="category-item">动态规划</a>
+                <a href="categories/graph.html" class="category-item">图论</a>
+                <a href="categories/sorting.html" class="category-item">排序</a>
+                <a href="categories/binary-search.html" class="category-item">二分查找</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 LeetCode题解博客 | 由 <a href="https://github.com/yourusername" target="_blank">你的名字</a> 创建</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html> 

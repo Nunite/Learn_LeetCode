@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>两数之和 - LeetCode题解博客</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    <style>
+        .solution-content {
+            line-height: 1.8;
+        }
+        
+        .solution-content p, .solution-content ul, .solution-content ol {
+            margin-bottom: 20px;
+        }
+        
+        .solution-content h3 {
+            margin: 30px 0 15px;
+            color: #2c3e50;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .solution-content ul, .solution-content ol {
+            padding-left: 20px;
+        }
+        
+        .solution-content li {
+            margin-bottom: 8px;
+        }
+        
+        .problem-info {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        
+        .problem-info h3 {
+            margin-top: 0;
+            border-bottom: none;
+        }
+        
+        .code-block {
+            margin: 20px 0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .complexity {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .complexity-item {
+            background-color: #f0f7ff;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .tag {
+            background-color: #f0f7ff;
+            color: #0066cc;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 14px;
+        }
+        
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+        }
+        
+        .prev-next-btn {
+            padding: 10px 15px;
+            background-color: #f0f7ff;
+            color: #0066cc;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        
+        .prev-next-btn:hover {
+            background-color: #0066cc;
+            color: white;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>LeetCode题解博客</h1>
+            <nav>
+                <ul>
+                    <li><a href="../index.html">首页</a></li>
+                    <li><a href="../problems.html">题目列表</a></li>
+                    <li><a href="../about.html">关于</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section>
+            <div class="problem-info">
+                <span class="difficulty easy">简单</span>
+                <h3>1. 两数之和</h3>
+                <p>给定一个整数数组 nums 和一个整数目标值 target，请你在该数组中找出 和为目标值 target 的那 两个 整数，并返回它们的数组下标。</p>
+                <p>你可以假设每种输入只会对应一个答案。但是，数组中同一个元素在答案里不能重复出现。</p>
+                <p>你可以按任意顺序返回答案。</p>
+                
+                <h4>示例 1：</h4>
+                <pre><code>输入：nums = [2,7,11,15], target = 9
+输出：[0,1]
+解释：因为 nums[0] + nums[1] == 9 ，返回 [0, 1] 。</code></pre>
+                
+                <h4>示例 2：</h4>
+                <pre><code>输入：nums = [3,2,4], target = 6
+输出：[1,2]</code></pre>
+                
+                <h4>示例 3：</h4>
+                <pre><code>输入：nums = [3,3], target = 6
+输出：[0,1]</code></pre>
+                
+                <h4>提示：</h4>
+                <ul>
+                    <li>2 <= nums.length <= 10<sup>4</sup></li>
+                    <li>-10<sup>9</sup> <= nums[i] <= 10<sup>9</sup></li>
+                    <li>-10<sup>9</sup> <= target <= 10<sup>9</sup></li>
+                    <li>只会存在一个有效答案</li>
+                </ul>
+                
+                <div class="tags">
+                    <span class="tag">数组</span>
+                    <span class="tag">哈希表</span>
+                </div>
+            </div>
+            
+            <div class="solution-content">
+                <h3>解题思路</h3>
+                <p>这道题要求我们找出数组中和为目标值的两个整数的下标。最直观的解法是使用双重循环，遍历所有可能的数字对，检查它们的和是否等于目标值。但这种方法的时间复杂度为 O(n²)，效率较低。</p>
+                
+                <p>我们可以使用哈希表来优化解法。具体思路如下：</p>
+                <ol>
+                    <li>创建一个哈希表，用于存储数组元素的值和对应的下标。</li>
+                    <li>遍历数组，对于每个元素 nums[i]，计算 target - nums[i] 的值，即为我们需要寻找的另一个数。</li>
+                    <li>检查哈希表中是否已经存在这个数。如果存在，说明我们找到了答案，返回这两个数的下标。</li>
+                    <li>如果不存在，将当前元素及其下标存入哈希表，继续遍历。</li>
+                </ol>
+                
+                <p>这种方法只需要遍历数组一次，时间复杂度为 O(n)，空间复杂度也为 O(n)。</p>
+                
+                <h3>代码实现</h3>
+                
+                <h4>Java 实现</h4>
+                <div class="code-block">
+                    <pre><code class="language-java">class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        Map&lt;Integer, Integer&gt; map = new HashMap&lt;&gt;();
+        for (int i = 0; i < nums.length; i++) {
+            int complement = target - nums[i];
+            if (map.containsKey(complement)) {
+                return new int[] { map.get(complement), i };
+            }
+            map.put(nums[i], i);
+        }
+        // 根据题目描述，不会走到这一步
+        return null;
+    }
+}</code></pre>
+                </div>
+                
+                <h4>Python 实现</h4>
+                <div class="code-block">
+                    <pre><code class="language-python">class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        hashmap = {}
+        for i, num in enumerate(nums):
+            complement = target - num
+            if complement in hashmap:
+                return [hashmap[complement], i]
+            hashmap[num] = i
+        # 根据题目描述，不会走到这一步
+        return []</code></pre>
+                </div>
+                
+                <h4>JavaScript 实现</h4>
+                <div class="code-block">
+                    <pre><code class="language-javascript">/**
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {number[]}
+ */
+var twoSum = function(nums, target) {
+    const map = new Map();
+    for (let i = 0; i < nums.length; i++) {
+        const complement = target - nums[i];
+        if (map.has(complement)) {
+            return [map.get(complement), i];
+        }
+        map.set(nums[i], i);
+    }
+    // 根据题目描述，不会走到这一步
+    return [];
+};</code></pre>
+                </div>
+                
+                <h3>复杂度分析</h3>
+                <div class="complexity">
+                    <div class="complexity-item">
+                        <strong>时间复杂度：</strong> O(n)，其中 n 是数组的长度。我们只需要遍历一次数组，对于每个元素，哈希表的查找操作的时间复杂度为 O(1)。
+                    </div>
+                    <div class="complexity-item">
+                        <strong>空间复杂度：</strong> O(n)，其中 n 是数组的长度。哈希表最多需要存储 n 个元素。
+                    </div>
+                </div>
+                
+                <h3>进阶思考</h3>
+                <p>这道题的哈希表解法已经是最优解了，时间复杂度为 O(n)。但如果题目有所变化，例如要求找出所有和为目标值的不重复数字对（而不是下标），或者数组已经排序，我们可能需要使用其他方法，如双指针法。</p>
+                
+                <p>如果你对这道题有任何疑问或者有更好的解法，欢迎在评论区留言讨论！</p>
+                
+                <div class="navigation-buttons">
+                    <a href="#" class="prev-next-btn">上一题</a>
+                    <a href="add-two-numbers.html" class="prev-next-btn">下一题：2. 两数相加</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 LeetCode题解博客 | 由 <a href="https://github.com/yourusername" target="_blank">你的名字</a> 创建</p>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+</body>
+</html> 

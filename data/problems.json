@@ -1,0 +1,85 @@
+[
+  {
+    "id": 1,
+    "title": "两数之和",
+    "titleEn": "Two Sum",
+    "difficulty": "easy",
+    "tags": ["数组", "哈希表"],
+    "url": "https://leetcode.cn/problems/two-sum/",
+    "content": {
+      "description": "给定一个整数数组 nums 和一个整数目标值 target，请你在该数组中找出 和为目标值 target 的那 两个 整数，并返回它们的数组下标。\n\n你可以假设每种输入只会对应一个答案。但是，数组中同一个元素在答案里不能重复出现。\n\n你可以按任意顺序返回答案。",
+      "examples": [
+        {
+          "input": "nums = [2,7,11,15], target = 9",
+          "output": "[0,1]",
+          "explanation": "因为 nums[0] + nums[1] == 9 ，返回 [0, 1] 。"
+        },
+        {
+          "input": "nums = [3,2,4], target = 6",
+          "output": "[1,2]"
+        },
+        {
+          "input": "nums = [3,3], target = 6",
+          "output": "[0,1]"
+        }
+      ],
+      "constraints": [
+        "2 <= nums.length <= 10^4",
+        "-10^9 <= nums[i] <= 10^9",
+        "-10^9 <= target <= 10^9",
+        "只会存在一个有效答案"
+      ],
+      "solution": {
+        "approach": "这道题要求我们找出数组中和为目标值的两个整数的下标。最直观的解法是使用双重循环，遍历所有可能的数字对，检查它们的和是否等于目标值。但这种方法的时间复杂度为 O(n²)，效率较低。\n\n我们可以使用哈希表来优化解法。具体思路如下：\n1. 创建一个哈希表，用于存储数组元素的值和对应的下标。\n2. 遍历数组，对于每个元素 nums[i]，计算 target - nums[i] 的值，即为我们需要寻找的另一个数。\n3. 检查哈希表中是否已经存在这个数。如果存在，说明我们找到了答案，返回这两个数的下标。\n4. 如果不存在，将当前元素及其下标存入哈希表，继续遍历。\n\n这种方法只需要遍历数组一次，时间复杂度为 O(n)，空间复杂度也为 O(n)。",
+        "timeComplexity": "O(n)，其中 n 是数组的长度。我们只需要遍历一次数组，对于每个元素，哈希表的查找操作的时间复杂度为 O(1)。",
+        "spaceComplexity": "O(n)，其中 n 是数组的长度。哈希表最多需要存储 n 个元素。",
+        "code": {
+          "java": "class Solution {\n    public int[] twoSum(int[] nums, int target) {\n        Map<Integer, Integer> map = new HashMap<>();\n        for (int i = 0; i < nums.length; i++) {\n            int complement = target - nums[i];\n            if (map.containsKey(complement)) {\n                return new int[] { map.get(complement), i };\n            }\n            map.put(nums[i], i);\n        }\n        // 根据题目描述，不会走到这一步\n        return null;\n    }\n}",
+          "python": "class Solution:\n    def twoSum(self, nums: List[int], target: int) -> List[int]:\n        hashmap = {}\n        for i, num in enumerate(nums):\n            complement = target - num\n            if complement in hashmap:\n                return [hashmap[complement], i]\n            hashmap[num] = i\n        # 根据题目描述，不会走到这一步\n        return []",
+          "javascript": "/**\n * @param {number[]} nums\n * @param {number} target\n * @return {number[]}\n */\nvar twoSum = function(nums, target) {\n    const map = new Map();\n    for (let i = 0; i < nums.length; i++) {\n        const complement = target - nums[i];\n        if (map.has(complement)) {\n            return [map.get(complement), i];\n        }\n        map.set(nums[i], i);\n    }\n    // 根据题目描述，不会走到这一步\n    return [];\n};"
+        }
+      }
+    }
+  },
+  {
+    "id": 2,
+    "title": "两数相加",
+    "titleEn": "Add Two Numbers",
+    "difficulty": "medium",
+    "tags": ["链表", "数学"],
+    "url": "https://leetcode.cn/problems/add-two-numbers/",
+    "content": {
+      "description": "给你两个 非空 的链表，表示两个非负的整数。它们每位数字都是按照 逆序 的方式存储的，并且每个节点只能存储 一位 数字。\n\n请你将两个数相加，并以相同形式返回一个表示和的链表。\n\n你可以假设除了数字 0 之外，这两个数都不会以 0 开头。",
+      "examples": [
+        {
+          "input": "l1 = [2,4,3], l2 = [5,6,4]",
+          "output": "[7,0,8]",
+          "explanation": "342 + 465 = 807."
+        },
+        {
+          "input": "l1 = [0], l2 = [0]",
+          "output": "[0]"
+        },
+        {
+          "input": "l1 = [9,9,9,9,9,9,9], l2 = [9,9,9,9]",
+          "output": "[8,9,9,9,0,0,0,1]"
+        }
+      ],
+      "constraints": [
+        "每个链表中的节点数在范围 [1, 100] 内",
+        "0 <= Node.val <= 9",
+        "题目数据保证列表表示的数字不含前导零"
+      ],
+      "solution": {
+        "approach": "这道题要求我们将两个链表表示的数字相加。由于链表是按照逆序存储的，所以我们可以直接从头开始同时遍历两个链表，将对应位置的数字相加，并考虑进位。\n\n具体步骤如下：\n1. 创建一个哑节点（dummy node），作为结果链表的头部。\n2. 维护一个进位变量 carry，初始值为 0。\n3. 同时遍历两个链表，对于每个位置，计算两个链表节点的值之和再加上进位 carry。\n4. 取和的个位数作为新节点的值，十位数作为新的进位 carry。\n5. 如果两个链表都遍历完了，但是 carry 不为 0，还需要在结果链表末尾添加一个值为 carry 的节点。\n6. 返回哑节点的下一个节点作为结果链表的头部。",
+        "timeComplexity": "O(max(m, n))，其中 m 和 n 分别是两个链表的长度。我们需要遍历两个链表的全部位置，而处理每个位置只需要 O(1) 的时间。",
+        "spaceComplexity": "O(max(m, n))，其中 m 和 n 分别是两个链表的长度。结果链表的长度最多为 max(m, n) + 1。",
+        "code": {
+          "java": "/**\n * Definition for singly-linked list.\n * public class ListNode {\n *     int val;\n *     ListNode next;\n *     ListNode() {}\n *     ListNode(int val) { this.val = val; }\n *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }\n * }\n */\nclass Solution {\n    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {\n        ListNode dummy = new ListNode(0);\n        ListNode curr = dummy;\n        int carry = 0;\n        \n        while (l1 != null || l2 != null) {\n            int x = (l1 != null) ? l1.val : 0;\n            int y = (l2 != null) ? l2.val : 0;\n            int sum = x + y + carry;\n            \n            carry = sum / 10;\n            curr.next = new ListNode(sum % 10);\n            curr = curr.next;\n            \n            if (l1 != null) l1 = l1.next;\n            if (l2 != null) l2 = l2.next;\n        }\n        \n        if (carry > 0) {\n            curr.next = new ListNode(carry);\n        }\n        \n        return dummy.next;\n    }\n}",
+          "python": "# Definition for singly-linked list.\n# class ListNode:\n#     def __init__(self, val=0, next=None):\n#         self.val = val\n#         self.next = next\nclass Solution:\n    def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:\n        dummy = ListNode(0)\n        curr = dummy\n        carry = 0\n        \n        while l1 or l2:\n            x = l1.val if l1 else 0\n            y = l2.val if l2 else 0\n            sum_val = x + y + carry\n            \n            carry = sum_val // 10\n            curr.next = ListNode(sum_val % 10)\n            curr = curr.next\n            \n            if l1: l1 = l1.next\n            if l2: l2 = l2.next\n        \n        if carry > 0:\n            curr.next = ListNode(carry)\n        \n        return dummy.next",
+          "javascript": "/**\n * Definition for singly-linked list.\n * function ListNode(val, next) {\n *     this.val = (val===undefined ? 0 : val)\n *     this.next = (next===undefined ? null : next)\n * }\n */\n/**\n * @param {ListNode} l1\n * @param {ListNode} l2\n * @return {ListNode}\n */\nvar addTwoNumbers = function(l1, l2) {\n    const dummy = new ListNode(0);\n    let curr = dummy;\n    let carry = 0;\n    \n    while (l1 || l2) {\n        const x = l1 ? l1.val : 0;\n        const y = l2 ? l2.val : 0;\n        const sum = x + y + carry;\n        \n        carry = Math.floor(sum / 10);\n        curr.next = new ListNode(sum % 10);\n        curr = curr.next;\n        \n        if (l1) l1 = l1.next;\n        if (l2) l2 = l2.next;\n    }\n    \n    if (carry > 0) {\n        curr.next = new ListNode(carry);\n    }\n    \n    return dummy.next;\n};"
+        }
+      }
+    }
+  }
+] 

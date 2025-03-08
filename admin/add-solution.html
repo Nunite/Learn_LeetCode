@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>添加新题解 - LeetCode题解博客</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+        
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .btn-primary {
+            background-color: #0066cc;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        
+        .tab-container {
+            margin-bottom: 20px;
+        }
+        
+        .tab-buttons {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 15px;
+        }
+        
+        .tab-button {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            font-size: 16px;
+            color: #666;
+        }
+        
+        .tab-button.active {
+            border-bottom-color: #0066cc;
+            color: #0066cc;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .example-container {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+        
+        .remove-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #f8d7da;
+            color: #721c24;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        
+        .add-btn {
+            background-color: #e7f5e7;
+            color: #28a745;
+            border: 1px dashed #28a745;
+            border-radius: 4px;
+            padding: 10px;
+            width: 100%;
+            text-align: center;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        
+        .code-editor {
+            font-family: monospace;
+            min-height: 200px;
+        }
+        
+        .tag-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .tag {
+            background-color: #f0f7ff;
+            color: #0066cc;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .tag .remove-tag {
+            margin-left: 5px;
+            cursor: pointer;
+            color: #0066cc;
+        }
+        
+        .tag-input {
+            display: flex;
+            margin-top: 10px;
+        }
+        
+        .tag-input input {
+            flex-grow: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px 0 0 4px;
+        }
+        
+        .tag-input button {
+            padding: 8px 15px;
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+        }
+        
+        .preview-container {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>LeetCode题解博客</h1>
+            <nav>
+                <ul>
+                    <li><a href="../index.html">首页</a></li>
+                    <li><a href="../problems.html">题目列表</a></li>
+                    <li><a href="../about.html">关于</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section>
+            <h2>添加新题解</h2>
+            
+            <div class="tab-container">
+                <div class="tab-buttons">
+                    <button class="tab-button active" data-tab="basic-info">基本信息</button>
+                    <button class="tab-button" data-tab="problem-description">题目描述</button>
+                    <button class="tab-button" data-tab="solution">解题思路</button>
+                    <button class="tab-button" data-tab="preview">预览</button>
+                </div>
+                
+                <form id="solution-form">
+                    <div id="basic-info" class="tab-content active">
+                        <div class="form-group">
+                            <label for="problem-id">题目编号</label>
+                            <input type="number" id="problem-id" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="problem-title">题目标题（中文）</label>
+                            <input type="text" id="problem-title" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="problem-title-en">题目标题（英文）</label>
+                            <input type="text" id="problem-title-en" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="problem-difficulty">难度</label>
+                            <select id="problem-difficulty" class="form-control" required>
+                                <option value="easy">简单</option>
+                                <option value="medium">中等</option>
+                                <option value="hard">困难</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="problem-url">LeetCode链接</label>
+                            <input type="url" id="problem-url" class="form-control" placeholder="https://leetcode.cn/problems/...">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>标签</label>
+                            <div class="tag-container" id="tags-container"></div>
+                            <div class="tag-input">
+                                <input type="text" id="tag-input" placeholder="输入标签，如：数组">
+                                <button type="button" id="add-tag-btn">添加</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="problem-description" class="tab-content">
+                        <div class="form-group">
+                            <label for="problem-description-text">题目描述</label>
+                            <textarea id="problem-description-text" class="form-control" rows="6" required></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>示例</label>
+                            <div id="examples-container"></div>
+                            <button type="button" id="add-example-btn" class="add-btn">+ 添加示例</button>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="problem-constraints">约束条件（每行一个）</label>
+                            <textarea id="problem-constraints" class="form-control" rows="4" placeholder="2 <= nums.length <= 10^4"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div id="solution" class="tab-content">
+                        <div class="form-group">
+                            <label for="solution-approach">解题思路</label>
+                            <textarea id="solution-approach" class="form-control" rows="8" required></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="time-complexity">时间复杂度</label>
+                            <input type="text" id="time-complexity" class="form-control" placeholder="O(n)" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="space-complexity">空间复杂度</label>
+                            <input type="text" id="space-complexity" class="form-control" placeholder="O(n)" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="java-code">Java 代码</label>
+                            <textarea id="java-code" class="form-control code-editor"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="python-code">Python 代码</label>
+                            <textarea id="python-code" class="form-control code-editor"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="javascript-code">JavaScript 代码</label>
+                            <textarea id="javascript-code" class="form-control code-editor"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div id="preview" class="tab-content">
+                        <div class="preview-container">
+                            <p>点击"生成预览"按钮查看题解预览</p>
+                        </div>
+                        <button type="button" id="generate-preview-btn" class="btn-primary" style="margin-top: 20px;">生成预览</button>
+                    </div>
+                    
+                    <div style="margin-top: 30px; display: flex; justify-content: space-between;">
+                        <button type="button" id="prev-btn" class="btn-primary" style="background-color: #6c757d;" disabled>上一步</button>
+                        <button type="button" id="next-btn" class="btn-primary">下一步</button>
+                        <button type="submit" id="submit-btn" class="btn-primary" style="display: none;">保存题解</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 LeetCode题解博客 | 由 <a href="https://github.com/yourusername" target="_blank">你的名字</a> 创建</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 标签管理
+            const tagsContainer = document.getElementById('tags-container');
+            const tagInput = document.getElementById('tag-input');
+            const addTagBtn = document.getElementById('add-tag-btn');
+            const tags = [];
+            
+            function renderTags() {
+                tagsContainer.innerHTML = '';
+                tags.forEach((tag, index) => {
+                    const tagElement = document.createElement('div');
+                    tagElement.className = 'tag';
+                    tagElement.innerHTML = `
+                        ${tag}
+                        <span class="remove-tag" data-index="${index}">×</span>
+                    `;
+                    tagsContainer.appendChild(tagElement);
+                });
+            }
+            
+            function addTag() {
+                const tag = tagInput.value.trim();
+                if (tag && !tags.includes(tag)) {
+                    tags.push(tag);
+                    renderTags();
+                    tagInput.value = '';
+                }
+            }
+            
+            addTagBtn.addEventListener('click', addTag);
+            tagInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    addTag();
+                }
+            });
+            
+            tagsContainer.addEventListener('click', function(e) {
+                if (e.target.classList.contains('remove-tag')) {
+                    const index = parseInt(e.target.dataset.index);
+                    tags.splice(index, 1);
+                    renderTags();
+                }
+            });
+            
+            // 示例管理
+            const examplesContainer = document.getElementById('examples-container');
+            const addExampleBtn = document.getElementById('add-example-btn');
+            
+            function addExample() {
+                const exampleId = Date.now();
+                const exampleElement = document.createElement('div');
+                exampleElement.className = 'example-container';
+                exampleElement.dataset.id = exampleId;
+                
+                exampleElement.innerHTML = `
+                    <button type="button" class="remove-btn" data-id="${exampleId}">删除</button>
+                    <div class="form-group">
+                        <label>输入</label>
+                        <input type="text" class="form-control example-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>输出</label>
+                        <input type="text" class="form-control example-output" required>
+                    </div>
+                    <div class="form-group">
+                        <label>解释（可选）</label>
+                        <input type="text" class="form-control example-explanation">
+                    </div>
+                `;
+                
+                examplesContainer.appendChild(exampleElement);
+            }
+            
+            addExampleBtn.addEventListener('click', addExample);
+            
+            examplesContainer.addEventListener('click', function(e) {
+                if (e.target.classList.contains('remove-btn')) {
+                    const id = e.target.dataset.id;
+                    const exampleElement = document.querySelector(`.example-container[data-id="${id}"]`);
+                    if (exampleElement) {
+                        exampleElement.remove();
+                    }
+                }
+            });
+            
+            // 添加一个默认示例
+            addExample();
+            
+            // 标签页切换
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const submitBtn = document.getElementById('submit-btn');
+            
+            let currentTabIndex = 0;
+            
+            function showTab(index) {
+                tabButtons.forEach((btn, i) => {
+                    btn.classList.toggle('active', i === index);
+                });
+                
+                tabContents.forEach((content, i) => {
+                    content.classList.toggle('active', i === index);
+                });
+                
+                currentTabIndex = index;
+                
+                // 更新按钮状态
+                prevBtn.disabled = index === 0;
+                nextBtn.style.display = index === tabButtons.length - 1 ? 'none' : 'block';
+                submitBtn.style.display = index === tabButtons.length - 1 ? 'block' : 'none';
+            }
+            
+            tabButtons.forEach((button, index) => {
+                button.addEventListener('click', () => {
+                    showTab(index);
+                });
+            });
+            
+            prevBtn.addEventListener('click', () => {
+                if (currentTabIndex > 0) {
+                    showTab(currentTabIndex - 1);
+                }
+            });
+            
+            nextBtn.addEventListener('click', () => {
+                if (currentTabIndex < tabButtons.length - 1) {
+                    showTab(currentTabIndex + 1);
+                }
+            });
+            
+            // 生成预览
+            const generatePreviewBtn = document.getElementById('generate-preview-btn');
+            const previewContainer = document.querySelector('.preview-container');
+            
+            generatePreviewBtn.addEventListener('click', function() {
+                // 收集表单数据
+                const problemData = {
+                    id: document.getElementById('problem-id').value,
+                    title: document.getElementById('problem-title').value,
+                    titleEn: document.getElementById('problem-title-en').value,
+                    difficulty: document.getElementById('problem-difficulty').value,
+                    tags: [...tags],
+                    url: document.getElementById('problem-url').value,
+                    content: {
+                        description: document.getElementById('problem-description-text').value,
+                        examples: Array.from(document.querySelectorAll('.example-container')).map(container => {
+                            return {
+                                input: container.querySelector('.example-input').value,
+                                output: container.querySelector('.example-output').value,
+                                explanation: container.querySelector('.example-explanation').value
+                            };
+                        }),
+                        constraints: document.getElementById('problem-constraints').value.split('\n').filter(line => line.trim()),
+                        solution: {
+                            approach: document.getElementById('solution-approach').value,
+                            timeComplexity: document.getElementById('time-complexity').value,
+                            spaceComplexity: document.getElementById('space-complexity').value,
+                            code: {
+                                java: document.getElementById('java-code').value,
+                                python: document.getElementById('python-code').value,
+                                javascript: document.getElementById('javascript-code').value
+                            }
+                        }
+                    }
+                };
+                
+                // 生成预览HTML
+                const difficultyText = {
+                    'easy': '简单',
+                    'medium': '中等',
+                    'hard': '困难'
+                }[problemData.difficulty];
+                
+                const previewHTML = `
+                    <div class="problem-info">
+                        <span class="difficulty ${problemData.difficulty}">${difficultyText}</span>
+                        <h3>${problemData.id}. ${problemData.title}</h3>
+                        <p>${problemData.content.description.replace(/\n/g, '</p><p>')}</p>
+                        
+                        ${problemData.content.examples.map((example, index) => `
+                            <h4>示例 ${index + 1}：</h4>
+                            <pre><code>输入：${example.input}
+输出：${example.output}${example.explanation ? '\n解释：' + example.explanation : ''}</code></pre>
+                        `).join('')}
+                        
+                        <h4>提示：</h4>
+                        <ul>
+                            ${problemData.content.constraints.map(constraint => `<li>${constraint}</li>`).join('')}
+                        </ul>
+                        
+                        <div class="tags">
+                            ${problemData.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                        </div>
+                    </div>
+                    
+                    <div class="solution-content">
+                        <h3>解题思路</h3>
+                        <p>${problemData.content.solution.approach.replace(/\n/g, '</p><p>')}</p>
+                        
+                        <h3>代码实现</h3>
+                        
+                        ${problemData.content.solution.code.java ? `
+                            <h4>Java 实现</h4>
+                            <div class="code-block">
+                                <pre><code class="language-java">${problemData.content.solution.code.java}</code></pre>
+                            </div>
+                        ` : ''}
+                        
+                        ${problemData.content.solution.code.python ? `
+                            <h4>Python 实现</h4>
+                            <div class="code-block">
+                                <pre><code class="language-python">${problemData.content.solution.code.python}</code></pre>
+                            </div>
+                        ` : ''}
+                        
+                        ${problemData.content.solution.code.javascript ? `
+                            <h4>JavaScript 实现</h4>
+                            <div class="code-block">
+                                <pre><code class="language-javascript">${problemData.content.solution.code.javascript}</code></pre>
+                            </div>
+                        ` : ''}
+                        
+                        <h3>复杂度分析</h3>
+                        <div class="complexity">
+                            <div class="complexity-item">
+                                <strong>时间复杂度：</strong> ${problemData.content.solution.timeComplexity}
+                            </div>
+                            <div class="complexity-item">
+                                <strong>空间复杂度：</strong> ${problemData.content.solution.spaceComplexity}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                previewContainer.innerHTML = previewHTML;
+            });
+            
+            // 表单提交
+            const solutionForm = document.getElementById('solution-form');
+            
+            solutionForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // 收集表单数据
+                const problemData = {
+                    id: document.getElementById('problem-id').value,
+                    title: document.getElementById('problem-title').value,
+                    titleEn: document.getElementById('problem-title-en').value,
+                    difficulty: document.getElementById('problem-difficulty').value,
+                    tags: [...tags],
+                    url: document.getElementById('problem-url').value,
+                    content: {
+                        description: document.getElementById('problem-description-text').value,
+                        examples: Array.from(document.querySelectorAll('.example-container')).map(container => {
+                            return {
+                                input: container.querySelector('.example-input').value,
+                                output: container.querySelector('.example-output').value,
+                                explanation: container.querySelector('.example-explanation').value
+                            };
+                        }),
+                        constraints: document.getElementById('problem-constraints').value.split('\n').filter(line => line.trim()),
+                        solution: {
+                            approach: document.getElementById('solution-approach').value,
+                            timeComplexity: document.getElementById('time-complexity').value,
+                            spaceComplexity: document.getElementById('space-complexity').value,
+                            code: {
+                                java: document.getElementById('java-code').value,
+                                python: document.getElementById('python-code').value,
+                                javascript: document.getElementById('javascript-code').value
+                            }
+                        }
+                    }
+                };
+                
+                // 在实际应用中，这里应该发送数据到服务器
+                // 由于这是一个静态网站，我们可以将数据保存到localStorage或下载为JSON文件
+                
+                // 保存到localStorage
+                const problems = JSON.parse(localStorage.getItem('leetcode-problems') || '[]');
+                
+                // 检查是否已存在相同ID的题目
+                const existingIndex = problems.findIndex(p => p.id === parseInt(problemData.id));
+                if (existingIndex !== -1) {
+                    problems[existingIndex] = problemData;
+                } else {
+                    problems.push(problemData);
+                }
+                
+                localStorage.setItem('leetcode-problems', JSON.stringify(problems));
+                
+                // 提供下载JSON文件的选项
+                const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(problemData, null, 2));
+                const downloadAnchorNode = document.createElement('a');
+                downloadAnchorNode.setAttribute("href", dataStr);
+                downloadAnchorNode.setAttribute("download", `problem-${problemData.id}.json`);
+                document.body.appendChild(downloadAnchorNode);
+                downloadAnchorNode.click();
+                downloadAnchorNode.remove();
+                
+                alert('题解已保存！您可以将下载的JSON文件添加到data/problems.json中。');
+                
+                // 重定向到首页
+                // window.location.href = '../index.html';
+            });
+        });
+    </script>
+</body>
+</html> 

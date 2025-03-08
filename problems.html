@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>题目列表 - LeetCode题解博客</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .problem-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .problem-table th, .problem-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .problem-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .problem-table tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .search-filter {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .search-filter input, .search-filter select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .search-filter input {
+            flex-grow: 1;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+            gap: 5px;
+        }
+        
+        .pagination a {
+            display: inline-block;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+        
+        .pagination a:hover, .pagination a.active {
+            background-color: #0066cc;
+            color: white;
+            border-color: #0066cc;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>LeetCode题解博客</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="problems.html" class="active">题目列表</a></li>
+                    <li><a href="about.html">关于</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section>
+            <h2>题目列表</h2>
+            
+            <div class="search-filter">
+                <input type="text" placeholder="搜索题目..." id="problem-search">
+                <select id="difficulty-filter">
+                    <option value="all">所有难度</option>
+                    <option value="easy">简单</option>
+                    <option value="medium">中等</option>
+                    <option value="hard">困难</option>
+                </select>
+                <select id="category-filter">
+                    <option value="all">所有分类</option>
+                    <option value="array">数组</option>
+                    <option value="string">字符串</option>
+                    <option value="linked-list">链表</option>
+                    <option value="tree">树</option>
+                    <option value="dynamic-programming">动态规划</option>
+                    <option value="graph">图论</option>
+                </select>
+            </div>
+            
+            <table class="problem-table">
+                <thead>
+                    <tr>
+                        <th>编号</th>
+                        <th>题目</th>
+                        <th>难度</th>
+                        <th>分类</th>
+                        <th>解题</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>两数之和</td>
+                        <td><span class="difficulty easy">简单</span></td>
+                        <td>数组, 哈希表</td>
+                        <td><a href="solutions/two-sum.html">查看解题</a></td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>两数相加</td>
+                        <td><span class="difficulty medium">中等</span></td>
+                        <td>链表, 数学</td>
+                        <td><a href="solutions/add-two-numbers.html">查看解题</a></td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>无重复字符的最长子串</td>
+                        <td><span class="difficulty medium">中等</span></td>
+                        <td>字符串, 滑动窗口</td>
+                        <td><a href="solutions/longest-substring-without-repeating-characters.html">查看解题</a></td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>寻找两个正序数组的中位数</td>
+                        <td><span class="difficulty hard">困难</span></td>
+                        <td>数组, 二分查找</td>
+                        <td><a href="solutions/median-of-two-sorted-arrays.html">查看解题</a></td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>最长回文子串</td>
+                        <td><span class="difficulty medium">中等</span></td>
+                        <td>字符串, 动态规划</td>
+                        <td><a href="solutions/longest-palindromic-substring.html">查看解题</a></td>
+                    </tr>
+                    <tr>
+                        <td>20</td>
+                        <td>有效的括号</td>
+                        <td><span class="difficulty easy">简单</span></td>
+                        <td>栈, 字符串</td>
+                        <td><a href="solutions/valid-parentheses.html">查看解题</a></td>
+                    </tr>
+                    <tr>
+                        <td>21</td>
+                        <td>合并两个有序链表</td>
+                        <td><span class="difficulty easy">简单</span></td>
+                        <td>链表, 递归</td>
+                        <td><a href="solutions/merge-two-sorted-lists.html">查看解题</a></td>
+                    </tr>
+                    <tr>
+                        <td>53</td>
+                        <td>最大子数组和</td>
+                        <td><span class="difficulty medium">中等</span></td>
+                        <td>数组, 动态规划</td>
+                        <td><a href="solutions/maximum-subarray.html">查看解题</a></td>
+                    </tr>
+                    <tr>
+                        <td>70</td>
+                        <td>爬楼梯</td>
+                        <td><span class="difficulty easy">简单</span></td>
+                        <td>动态规划</td>
+                        <td><a href="solutions/climbing-stairs.html">查看解题</a></td>
+                    </tr>
+                    <tr>
+                        <td>146</td>
+                        <td>LRU缓存</td>
+                        <td><span class="difficulty medium">中等</span></td>
+                        <td>设计, 哈希表, 链表</td>
+                        <td><a href="solutions/lru-cache.html">查看解题</a></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="pagination">
+                <a href="#" class="active">1</a>
+                <a href="#">2</a>
+                <a href="#">3</a>
+                <a href="#">4</a>
+                <a href="#">5</a>
+                <a href="#">&raquo;</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 LeetCode题解博客 | 由 <a href="https://github.com/yourusername" target="_blank">你的名字</a> 创建</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html> 
